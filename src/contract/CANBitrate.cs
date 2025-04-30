@@ -72,445 +72,445 @@ namespace Ixxat.Vci4.Bal.Can
     // properties
     //--------------------------------------------------------------------
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the value of the bus timing register 0. The value corresponds to 
-      ///   the BTR0 register of the Phillips SJA 1000 CAN controller with a cycle 
-      ///   frequency of 16 MHz. Further information on this is given in the 
-      ///   data sheet of the SJA 1000.
-      /// </summary>
-      /// <returns>
-      ///   Value for the bit timing register 0.
-      /// </returns>
-      //*****************************************************************************
-      public byte Btr0
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the value of the bus timing register 0. The value corresponds to 
+    ///   the BTR0 register of the Phillips SJA 1000 CAN controller with a cycle 
+    ///   frequency of 16 MHz. Further information on this is given in the 
+    ///   data sheet of the SJA 1000.
+    /// </summary>
+    /// <returns>
+    ///   Value for the bit timing register 0.
+    /// </returns>
+    //*****************************************************************************
+    public byte Btr0
+    {
+      get
       {
-        get
-        {
-          return( m_bBtr0 );
-        }
+        return( m_bBtr0 );
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the value of the bus timing register 1. The value corresponds to 
-      ///   the BTR1 register of the Phillips SJA 1000 CAN controller with a cycle 
-      ///   frequency of 16 MHz. Further information on this is given in the 
-      ///   data sheet of the SJA 1000.
-      /// </summary>
-      /// <returns>
-      ///   Value for the bit timing register 1.
-      /// </returns>
-      //*****************************************************************************
-      public byte Btr1
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the value of the bus timing register 1. The value corresponds to 
+    ///   the BTR1 register of the Phillips SJA 1000 CAN controller with a cycle 
+    ///   frequency of 16 MHz. Further information on this is given in the 
+    ///   data sheet of the SJA 1000.
+    /// </summary>
+    /// <returns>
+    ///   Value for the bit timing register 1.
+    /// </returns>
+    //*****************************************************************************
+    public byte Btr1
+    {
+      get
       {
-        get
-        {
-          return( m_bBtr1 );
-        }
+        return( m_bBtr1 );
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the 16 bit value of this CanBitrate structure.
-      /// </summary>
-      /// <returns>
-      ///   The 16 bit value of this CanBitrate structure.
-      /// </returns>
-      //*****************************************************************************
-      public short AsInt16
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the 16 bit value of this CanBitrate structure.
+    /// </summary>
+    /// <returns>
+    ///   The 16 bit value of this CanBitrate structure.
+    /// </returns>
+    //*****************************************************************************
+    public short AsInt16
+    {
+      get
       {
-        get
-        {
-          return (short)( (m_bBtr1 << 8) | m_bBtr0 );
-        }
+        return (short)( (m_bBtr1 << 8) | m_bBtr0 );
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit time of this CanBitrate.
-      ///   (Bit time of this CanBitrate in clock ticks according to SJA1000.)
-      /// </summary>
-      /// <returns>
-      ///   Bit time of this CanBitrate in clock ticks according to SJA1000.
-      /// </returns>
-      //*****************************************************************************
-      public int Bittime
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit time of this CanBitrate.
+    ///   (Bit time of this CanBitrate in clock ticks according to SJA1000.)
+    /// </summary>
+    /// <returns>
+    ///   Bit time of this CanBitrate in clock ticks according to SJA1000.
+    /// </returns>
+    //*****************************************************************************
+    public int Bittime
+    {
+      get
       {
-        get
-        {
-          int brp = (m_bBtr0 & 0x3F);
-          int ts1 = (m_bBtr1 & 0x0F);
-          int ts2 = ((m_bBtr1 & 0x70) >> 4);
-          return(2*(brp+1)*(ts1+ts2+3));
-        }
+        int brp = (m_bBtr0 & 0x3F);
+        int ts1 = (m_bBtr1 & 0x0F);
+        int ts2 = ((m_bBtr1 & 0x70) >> 4);
+        return(2*(brp+1)*(ts1+ts2+3));
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the name of this bitrate.
-      /// </summary>
-      /// <returns>
-      ///   The name of this bitrate.
-      /// </returns>
-      /// <remarks>
-      ///   This property returns either the user defined name of the bit rate,
-      ///   if the bit rate was created with a name, or the name of the known
-      ///   bit rate. For custom bit rates without a user defined name, the
-      ///   property returns the bit timing value as numeric string.
-      /// </remarks>
-      //*****************************************************************************
-      public string  Name
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the name of this bitrate.
+    /// </summary>
+    /// <returns>
+    ///   The name of this bitrate.
+    /// </returns>
+    /// <remarks>
+    ///   This property returns either the user defined name of the bit rate,
+    ///   if the bit rate was created with a name, or the name of the known
+    ///   bit rate. For custom bit rates without a user defined name, the
+    ///   property returns the bit timing value as numeric string.
+    /// </remarks>
+    //*****************************************************************************
+    public string  Name
+    {
+      get
       {
-        get
-        {
-          return( ToString() );
-        }
+        return( ToString() );
       }
+    }
 
 
     //--------------------------------------------------------------------
     // static properties
     //--------------------------------------------------------------------
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets an empty bit timing value.
-      /// </summary>
-      /// <returns>
-      ///   Empty bit timing value.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate Empty
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets an empty bit timing value.
+    /// </summary>
+    /// <returns>
+    ///   Empty bit timing value.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate Empty
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(0, 0, "<Empty>");
-        }
+        return new CanBitrate(0, 0, "<Empty>");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 10 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 10 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate Cia10KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 10 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 10 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate Cia10KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(CAN_BT0_10KB, CAN_BT1_10KB, "CiA 10 kbit/s");
-        }
+        return new CanBitrate(CAN_BT0_10KB, CAN_BT1_10KB, "CiA 10 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 20 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 20 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate Cia20KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 20 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 20 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate Cia20KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(CAN_BT0_20KB, CAN_BT1_20KB, "CiA 20 kbit/s");
-        }
+        return new CanBitrate(CAN_BT0_20KB, CAN_BT1_20KB, "CiA 20 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 50 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 50 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate Cia50KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 50 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 50 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate Cia50KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(CAN_BT0_50KB, CAN_BT1_50KB, "CiA 50 kbit/s");
-        }
+        return new CanBitrate(CAN_BT0_50KB, CAN_BT1_50KB, "CiA 50 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 125 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 125 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate Cia125KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 125 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 125 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate Cia125KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(CAN_BT0_125KB, CAN_BT1_125KB, "CiA 125 kbit/s");
-        }
+        return new CanBitrate(CAN_BT0_125KB, CAN_BT1_125KB, "CiA 125 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 250 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 250 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate Cia250KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 250 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 250 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate Cia250KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(CAN_BT0_250KB, CAN_BT1_250KB, "CiA 250 kbit/s");
-        }
+        return new CanBitrate(CAN_BT0_250KB, CAN_BT1_250KB, "CiA 250 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 500 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 500 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate Cia500KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 500 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 500 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate Cia500KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(CAN_BT0_500KB, CAN_BT1_500KB, "CiA 500 kbit/s");
-        }
+        return new CanBitrate(CAN_BT0_500KB, CAN_BT1_500KB, "CiA 500 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 800 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 800 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate Cia800KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 800 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 800 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate Cia800KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(CAN_BT0_800KB, CAN_BT1_800KB, "CiA 800 kbit/s");
-        }
+        return new CanBitrate(CAN_BT0_800KB, CAN_BT1_800KB, "CiA 800 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 1000 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 1000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate Cia1000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 1000 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 1000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate Cia1000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(CAN_BT0_1000KB, CAN_BT1_1000KB, "CiA 1000 kbit/s");
-        }
+        return new CanBitrate(CAN_BT0_1000KB, CAN_BT1_1000KB, "CiA 1000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 100 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 100 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate _100KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 100 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 100 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate _100KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate(CAN_BT0_100KB, CAN_BT1_100KB, "100 kbit/s");
-        }
+        return new CanBitrate(CAN_BT0_100KB, CAN_BT1_100KB, "100 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets an array of all available CiA baud rates.
-      /// </summary>
-      /// <returns>
-      ///   Array of all available CiA baud rates.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate[] CiaBitRates
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets an array of all available CiA baud rates.
+    /// </summary>
+    /// <returns>
+    ///   Array of all available CiA baud rates.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate[] CiaBitRates
+    {
+      get
       {
-        get
-        {
-          CanBitrate[] ciaRates = new CanBitrate[] { Cia10KBit,  
-                                                     Cia20KBit,  
-                                                     Cia50KBit,
-                                                     Cia125KBit, 
-                                                     Cia250KBit,
-                                                     Cia500KBit, 
-                                                     Cia800KBit, 
-                                                     Cia1000KBit
-                                                   };
-          return ciaRates;
-        }
+        CanBitrate[] bitrates = new CanBitrate[] { Cia10KBit,
+                                                   Cia20KBit,
+                                                   Cia50KBit,
+                                                   Cia125KBit,
+                                                   Cia250KBit,
+                                                   Cia500KBit,
+                                                   Cia800KBit,
+                                                   Cia1000KBit
+                                                 };
+        return bitrates;
       }
+    }
 
 
     //--------------------------------------------------------------------
     // member functions
     //--------------------------------------------------------------------
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Constructor for a new CanBitrate.
-      /// </summary>
-      /// <param name="bitTimingRegister0">
-      ///   Value for bit timing register 0
-      /// </param>
-      /// <param name="bitTimingRegister1">
-      ///   Value for bit timing register 1
-      /// </param>
-      //*****************************************************************************
-      public CanBitrate(byte bitTimingRegister0, byte bitTimingRegister1)
+    //*****************************************************************************
+    /// <summary>
+    ///   Constructor for a new CanBitrate.
+    /// </summary>
+    /// <param name="bitTimingRegister0">
+    ///   Value for bit timing register 0
+    /// </param>
+    /// <param name="bitTimingRegister1">
+    ///   Value for bit timing register 1
+    /// </param>
+    //*****************************************************************************
+    public CanBitrate(byte bitTimingRegister0, byte bitTimingRegister1)
+    {
+      m_bBtr0 = bitTimingRegister0;
+      m_bBtr1 = bitTimingRegister1;
+      m_sName = null;
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Constructor for a new CanBitrate.
+    /// </summary>
+    /// <param name="bitTimingRegister0">
+    ///   Value for bit timing register 0
+    /// </param>
+    /// <param name="bitTimingRegister1">
+    ///   Value for bit timing register 1
+    /// </param>
+    /// <param name="name">
+    ///   Human readable name of the bit rate.
+    /// </param>
+    //*****************************************************************************
+    public CanBitrate(byte bitTimingRegister0, byte bitTimingRegister1, string  name)
+    {
+      m_bBtr0 = bitTimingRegister0;
+      m_bBtr1 = bitTimingRegister1;
+      m_sName = name;
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   This method returns a String that represents the current timing value.
+    /// </summary>
+    /// <returns>
+    ///   A String that represents the current bit timing value.
+    /// </returns>
+    //*****************************************************************************
+    public override string  ToString()
+    {
+      if (null == m_sName)
       {
-        m_bBtr0 = bitTimingRegister0;
-        m_bBtr1 = bitTimingRegister1;
-        m_sName = null;
+        m_sName = String.Format("{0:X2}:{1:X2}", m_bBtr0, m_bBtr1);
       }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Constructor for a new CanBitrate.
-      /// </summary>
-      /// <param name="bitTimingRegister0">
-      ///   Value for bit timing register 0
-      /// </param>
-      /// <param name="bitTimingRegister1">
-      ///   Value for bit timing register 1
-      /// </param>
-      /// <param name="name">
-      ///   Human readable name of the bit rate.
-      /// </param>
-      //*****************************************************************************
-      public CanBitrate(byte bitTimingRegister0, byte bitTimingRegister1, string  name)
-      {
-        m_bBtr0 = bitTimingRegister0;
-        m_bBtr1 = bitTimingRegister1;
-        m_sName = name;
-      }
+      return( m_sName );
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   This method returns a String that represents the current timing value.
-      /// </summary>
-      /// <returns>
-      ///   A String that represents the current bit timing value.
-      /// </returns>
-      //*****************************************************************************
-      public override string  ToString()
-      {
-        if (null == m_sName)
-        {
-          m_sName = String.Format("{0:X2}:{1:X2}", m_bBtr0, m_bBtr1);
-        }
+    //*****************************************************************************
+    /// <summary>
+    ///   Determines whether the specified Object is equal to the current Object.
+    /// </summary>
+    /// <pararm name ="obj">
+    ///   The Object to compare with the current Object.
+    /// </pararm>
+    /// <returns>
+    ///   true if the specified Object is equal to the current Object; 
+    ///   otherwise, false.
+    /// </returns>
+    //*****************************************************************************
+    public override bool Equals(Object? obj)
+    {
+      // Check for null values and compare run-time types.
+      if (!(obj is CanBitrate))
+        return false;
 
-        return( m_sName );
-      }
+      return Equals((CanBitrate)obj);
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Determines whether the specified Object is equal to the current Object.
-      /// </summary>
-      /// <pararm name ="obj">
-      ///   The Object to compare with the current Object.
-      /// </pararm>
-      /// <returns>
-      ///   true if the specified Object is equal to the current Object; 
-      ///   otherwise, false.
-      /// </returns>
-      //*****************************************************************************
-      public override bool Equals(Object? obj)
-      {
-        // Check for null values and compare run-time types.
-        if (!(obj is CanBitrate))
-          return false;
+    //*****************************************************************************
+    /// <summary>
+    ///   Determines whether the specified Object is equal to the current Object.
+    /// </summary>
+    /// <pararm name ="other">
+    ///   The Object to compare with the current Object.
+    /// </pararm>
+    /// <returns>
+    ///   true if the specified Object is equal to the current Object; 
+    ///   otherwise, false.
+    /// </returns>
+    //*****************************************************************************
+    public bool Equals(CanBitrate other)
+    {
+      return (Btr0 == other.Btr0) && (Btr1 == other.Btr1);
+    }
 
-        return Equals((CanBitrate)obj);
-      }
+    //*****************************************************************************
+    /// <summary>
+    ///   Comparison operator ==
+    /// </summary>
+    /// <pararm name ="lhs">
+    ///   left hand side object to compare
+    /// </pararm>
+    /// <pararm name ="rhs">
+    ///   right hand side object to compare
+    /// </pararm>
+    /// <returns>
+    ///   true if the specified Object is equal to the current Object; 
+    ///   otherwise, false.
+    /// </returns>
+    //*****************************************************************************
+    public static bool operator ==(CanBitrate lhs, CanBitrate rhs)
+    {
+      return lhs.Equals(rhs);
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Determines whether the specified Object is equal to the current Object.
-      /// </summary>
-      /// <pararm name ="other">
-      ///   The Object to compare with the current Object.
-      /// </pararm>
-      /// <returns>
-      ///   true if the specified Object is equal to the current Object; 
-      ///   otherwise, false.
-      /// </returns>
-      //*****************************************************************************
-      public bool Equals(CanBitrate other)
-      {
-        return (Btr0 == other.Btr0) && (Btr1 == other.Btr1);
-      }
+    //*****************************************************************************
+    /// <summary>
+    ///   Comparison operator !=
+    /// </summary>
+    /// <pararm name ="lhs">
+    ///   left hand side object to compare
+    /// </pararm>
+    /// <pararm name ="rhs">
+    ///   right hand side object to compare
+    /// </pararm>
+    /// <returns>
+    ///   true if the specified Object is not equal to the current Object; 
+    ///   otherwise, false.
+    /// </returns>
+    //*****************************************************************************
+    public static bool operator !=(CanBitrate lhs, CanBitrate rhs)
+    {
+      return !lhs.Equals(rhs);
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Comparison operator ==
-      /// </summary>
-      /// <pararm name ="lhs">
-      ///   left hand side object to compare
-      /// </pararm>
-      /// <pararm name ="rhs">
-      ///   right hand side object to compare
-      /// </pararm>
-      /// <returns>
-      ///   true if the specified Object is equal to the current Object; 
-      ///   otherwise, false.
-      /// </returns>
-      //*****************************************************************************
-      public static bool operator ==(CanBitrate lhs, CanBitrate rhs)
-      {
-        return lhs.Equals(rhs);
-      }
-
-      //*****************************************************************************
-      /// <summary>
-      ///   Comparison operator !=
-      /// </summary>
-      /// <pararm name ="lhs">
-      ///   left hand side object to compare
-      /// </pararm>
-      /// <pararm name ="rhs">
-      ///   right hand side object to compare
-      /// </pararm>
-      /// <returns>
-      ///   true if the specified Object is not equal to the current Object; 
-      ///   otherwise, false.
-      /// </returns>
-      //*****************************************************************************
-      public static bool operator !=(CanBitrate lhs, CanBitrate rhs)
-      {
-        return !lhs.Equals(rhs);
-      }
-
-      //*****************************************************************************
-      /// <summary>
-      ///   Serves as a hash function for a particular type. GetHashCode is suitable 
-      ///   for use in hashing algorithms and data structures like a hash table.
-      /// </summary>
-      /// <returns>
-      ///   A hash code for the current Object. 
-      /// </returns>
-      //*****************************************************************************
-      public override int GetHashCode()
-      {
-        return (m_bBtr0 << 8) + m_bBtr1;
-      }
+    //*****************************************************************************
+    /// <summary>
+    ///   Serves as a hash function for a particular type. GetHashCode is suitable 
+    ///   for use in hashing algorithms and data structures like a hash table.
+    /// </summary>
+    /// <returns>
+    ///   A hash code for the current Object. 
+    /// </returns>
+    //*****************************************************************************
+    public override int GetHashCode()
+    {
+      return (m_bBtr0 << 8) + m_bBtr1;
+    }
   };
 
   //*****************************************************************************
@@ -571,895 +571,1073 @@ namespace Ixxat.Vci4.Bal.Can
     //--------------------------------------------------------------------
 
       //*****************************************************************************
-      /// <summary>
-      ///   Gets the value of the bittiming mode. Mode can be native values, which 
-      ///   will be written directly to the can controller register or logical values
-      ///   which contains the bitrate and the sample point. These values will
-      ///   be recalculated by the driver to match the can controller's settings.
-      /// </summary>
-      /// <returns>
-      ///   Value for the bittiming mode.
-      /// </returns>
-      //*****************************************************************************
-      public CanBitrateMode Mode
+    /// <summary>
+    ///   Gets the value of the bittiming mode. Mode can be native values, which 
+    ///   will be written directly to the can controller register or logical values
+    ///   which contains the bitrate and the sample point. These values will
+    ///   be recalculated by the driver to match the can controller's settings.
+    /// </summary>
+    /// <returns>
+    ///   Value for the bittiming mode.
+    /// </returns>
+    //*****************************************************************************
+    public CanBitrateMode Mode
+    {
+      get
       {
-        get
-        {
-          return( (CanBitrateMode)m_dwMode );
-        }
+        return( (CanBitrateMode)m_dwMode );
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
+    //*****************************************************************************
+    /// <summary>
       ///   Gets the value of the prescaler.
       /// </summary>
       /// <returns>
       ///   Value for the prescaler.
       /// </returns>
-      //*****************************************************************************
-      public uint Prescaler
+    //*****************************************************************************
+    public uint Prescaler
+    {
+      get
       {
-        get
-        {
-          return( m_dwBPS );
-        }
+        return( m_dwBPS );
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the value of the bus timing segment 1. The value is scaled in
-      ///   can time quantas for the specific prescaler.
-      /// </summary>
-      /// <returns>
-      ///   Value for the bit timing segment 1.
-      /// </returns>
-      //*****************************************************************************
-      public ushort TimeSegment1
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the value of the bus timing segment 1. The value is scaled in
+    ///   can time quantas for the specific prescaler.
+    /// </summary>
+    /// <returns>
+    ///   Value for the bit timing segment 1.
+    /// </returns>
+    //*****************************************************************************
+    public ushort TimeSegment1
+    {
+      get
       {
-        get
-        {
-          return( m_wTS1 );
-        }
+        return( m_wTS1 );
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the value of the bus timing segment 2. The value is scaled in
-      ///   can time quantas for the specific prescaler.
-      /// </summary>
-      /// <returns>
-      ///   Value for the bit timing segment 2.
-      /// </returns>
-      //*****************************************************************************
-      public ushort TimeSegment2
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the value of the bus timing segment 2. The value is scaled in
+    ///   can time quantas for the specific prescaler.
+    /// </summary>
+    /// <returns>
+    ///   Value for the bit timing segment 2.
+    /// </returns>
+    //*****************************************************************************
+    public ushort TimeSegment2
+    {
+      get
       {
-        get
-        {
-          return( m_wTS2 );
-        }
+        return( m_wTS2 );
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the value of the synchronisation jump bit width. The value is scaled in
-      ///   can time quantas for the specific prescaler.
-      /// </summary>
-      /// <returns>
-      ///   Value for the synchronisation jump bit width.
-      /// </returns>
-      //*****************************************************************************
-      public ushort Sjw
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the value of the synchronisation jump bit width. The value is scaled in
+    ///   can time quantas for the specific prescaler.
+    /// </summary>
+    /// <returns>
+    ///   Value for the synchronisation jump bit width.
+    /// </returns>
+    //*****************************************************************************
+    public ushort Sjw
+    {
+      get
       {
-        get
-        {
-          return( m_wSJW );
-        }
+        return( m_wSJW );
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the value of the transmitter delay offset. The value is scaled in
-      ///   can time quantas for the specific prescaler.
-      /// </summary>
-      /// <returns>
-      ///   Value for the transmitter delay offset.
-      /// </returns>
-      //*****************************************************************************
-      public ushort TransmitterDelay
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the value of the transmitter delay offset. The value is scaled in
+    ///   can time quantas for the specific prescaler.
+    /// </summary>
+    /// <returns>
+    ///   Value for the transmitter delay offset.
+    /// </returns>
+    //*****************************************************************************
+    public ushort TransmitterDelay
+    {
+      get
       {
-        get
-        {
-          return( m_wTDO );
-        }
+        return( m_wTDO );
       }
+    }
 
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit time of this CanBitrate2.
-      ///   (Bit time of this CanBitrate2 in clock ticks according to SJA1000.)
-      /// </summary>
-      /// <returns>
-      ///   Bit time of this CanBitrate2 in clock ticks according to SJA1000.
-      /// </returns>
-      //*****************************************************************************
-      public Int32 Bittime
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit time of this CanBitrate2.
+    ///   (Bit time of this CanBitrate2 in clock ticks according to SJA1000.)
+    /// </summary>
+    /// <returns>
+    ///   Bit time of this CanBitrate2 in clock ticks according to SJA1000.
+    /// </returns>
+    //*****************************************************************************
+    public Int32 Bittime
+    {
+      get
       {
-        get
-        {
-          // TODO: think about bit time representation
-          return 0;
-        }
+        // TODO: think about bit time representation
+        return 0;
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the name of this CanBitrate2.
-      /// </summary>
-      /// <returns>
-      ///   The name of this bitrate.
-      /// </returns>
-      /// <remarks>
-      ///   This property returns either the user defined name of the bit rate,
-      ///   if the bit rate was created with a name, or the name of the known
-      ///   bit rate. For custom bit rates without a user defined name, the
-      ///   property returns the bit timing value as numeric string.
-      /// </remarks>
-      //*****************************************************************************
-      public string  Name
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the name of this CanBitrate2.
+    /// </summary>
+    /// <returns>
+    ///   The name of this bitrate.
+    /// </returns>
+    /// <remarks>
+    ///   This property returns either the user defined name of the bit rate,
+    ///   if the bit rate was created with a name, or the name of the known
+    ///   bit rate. For custom bit rates without a user defined name, the
+    ///   property returns the bit timing value as numeric string.
+    /// </remarks>
+    //*****************************************************************************
+    public string  Name
+    {
+      get
       {
-        get
-        {
-          return( ToString() );
-        }
+        return( ToString() );
       }
+    }
 
 
     //--------------------------------------------------------------------
     // static properties
     //--------------------------------------------------------------------
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets an empty bit timing value.
-      /// </summary>
-      /// <returns>
-      ///   Empty bit timing value.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 Empty
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets an empty bit timing value.
+    /// </summary>
+    /// <returns>
+    ///   Empty bit timing value.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 Empty
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 0, 0, 0, 0, 0, "<Empty>");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 0, 0, 0, 0, 0, "<Empty>");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 10 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 10 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 Cia10KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 10 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 10 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 Cia10KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 10000, 14, 2, 1, 0, "CiA 10 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 10000, 14, 2, 1, 0, "CiA 10 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 20 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 20 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 Cia20KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 20 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 20 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 Cia20KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 20000, 14, 2, 1, 0, "CiA 20 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 20000, 14, 2, 1, 0, "CiA 20 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 50 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 50 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 Cia50KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 50 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 50 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 Cia50KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 50000, 14, 2, 1, 0, "CiA 50 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 50000, 14, 2, 1, 0, "CiA 50 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 125 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 125 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 Cia125KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 125 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 125 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 Cia125KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 125000, 14, 2, 1, 0, "CiA 125 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 125000, 14, 2, 1, 0, "CiA 125 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 250 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 250 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 Cia250KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 250 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 250 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 Cia250KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 250000, 14, 2, 1, 0, "CiA 250 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 250000, 14, 2, 1, 0, "CiA 250 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 500 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 500 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 Cia500KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 500 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 500 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 Cia500KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 500000, 14, 2, 1, 0, "CiA 500 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 500000, 14, 2, 1, 0, "CiA 500 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 800 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 800 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 Cia800KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 800 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 800 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 Cia800KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 800000, 8, 2, 1, 0, "CiA 800 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 800000, 8, 2, 1, 0, "CiA 800 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined CiA bit rate of 1000 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined CiA 1000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 Cia1000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CiA bit rate of 1000 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined CiA 1000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 Cia1000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 1000000, 6, 2, 1, 0, "CiA 1000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 1000000, 6, 2, 1, 0, "CiA 1000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 100 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 100 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 _100KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 100 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 100 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 _100KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 100000, 14, 2, 1, 0, "100 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 100000, 14, 2, 1, 0, "100 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 833 kbit/s.
-      ///   (raw, IFI CAN-FD specific)
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 833 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 IFI833KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 833 kbit/s.
+    ///   (raw, IFI CAN-FD specific)
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 833 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 IFI833KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.Raw, 6, 12, 3, 3, 78, "IFI CAN-FD 1000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.Raw, 6, 12, 3, 3, 78, "IFI CAN-FD 1000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 1000 kbit/s.
-      ///   (raw, IFI CAN-FD specific)
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 1000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 IFI1000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 1000 kbit/s.
+    ///   (raw, IFI CAN-FD specific)
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 1000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 IFI1000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.Raw, 4, 15, 4, 4, 64, "IFI CAN-FD 1000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.Raw, 4, 15, 4, 4, 64, "IFI CAN-FD 1000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 2000 kbit/s.
-      ///   (raw, IFI CAN-FD specific)
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 2000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 IFI2000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 2000 kbit/s.
+    ///   (raw, IFI CAN-FD specific)
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 2000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 IFI2000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.Raw, 2, 15, 4, 4, 32, "IFI CAN-FD 2000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.Raw, 2, 15, 4, 4, 32, "IFI CAN-FD 2000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 4000 kbit/s.
-      ///   (raw, IFI CAN-FD specific)
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 4000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 IFI4000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 4000 kbit/s.
+    ///   (raw, IFI CAN-FD specific)
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 4000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 IFI4000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.Raw, 2, 7, 2, 2, 16, "IFI CAN-FD 4000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.Raw, 2, 7, 2, 2, 16, "IFI CAN-FD 4000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 5000 kbit/s.
-      ///   (raw, IFI CAN-FD specific)
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 5000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 IFI5000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 5000 kbit/s.
+    ///   (raw, IFI CAN-FD specific)
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 5000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 IFI5000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.Raw, 2, 5, 2, 2, 12, "IFI CAN-FD 5000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.Raw, 2, 5, 2, 2, 12, "IFI CAN-FD 5000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 6667 kbit/s.
-      ///   (raw, IFI CAN-FD specific)
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 6667 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 IFI6667KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 6667 kbit/s.
+    ///   (raw, IFI CAN-FD specific)
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 6667 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 IFI6667KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.Raw, 2, 3, 2, 2, 8, "IFI CAN-FD 6667 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.Raw, 2, 3, 2, 2, 8, "IFI CAN-FD 6667 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 8000 kbit/s.
-      ///   (raw, IFI CAN-FD specific)
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 8000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 IFI8000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 8000 kbit/s.
+    ///   (raw, IFI CAN-FD specific)
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 8000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 IFI8000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.Raw, 2, 3, 1, 1, 5, "IFI CAN-FD 8000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.Raw, 2, 3, 1, 1, 5, "IFI CAN-FD 8000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 10000 kbit/s.
-      ///   (raw, IFI CAN-FD specific)
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 10000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 IFI10000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 10000 kbit/s.
+    ///   (raw, IFI CAN-FD specific)
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 10000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 IFI10000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.Raw, 2, 2, 1, 1, 4, "IFI CAN-FD 10000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.Raw, 2, 2, 1, 1, 4, "IFI CAN-FD 10000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 250 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 250 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD250KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 250 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 250 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD250KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 250000, 6400, 1600, 1600, (ushort)((6400 + 1600) * 0.8), "CANFD 250 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 250000, 6400, 1600, 1600, (ushort)((6400 + 1600) * 0.8), "CANFD 250 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 500 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 500 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD500KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 500 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 500 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD500KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 500000,  6400, 1600, 1600,  (ushort)((6400+1600) * 0.8), "CANFD 500 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 500000,  6400, 1600, 1600,  (ushort)((6400+1600) * 0.8), "CANFD 500 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 833 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 833 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD833KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 833 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 833 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD833KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 833333, 1600, 400, 400, (ushort)((6400 + 1600) * 0.81), "CANFD 833 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 833333, 1600, 400, 400, (ushort)((6400 + 1600) * 0.81), "CANFD 833 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 1000 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 1000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD1000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 1000 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 1000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD1000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 1000000, 1600, 400, 400, (ushort)((1600 + 400) * 0.8), "CANFD 1000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 1000000, 1600, 400, 400, (ushort)((1600 + 400) * 0.8), "CANFD 1000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 1538 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 1538 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD1538KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 1538 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 1538 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD1538KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 1538461, 1000, 300, 300, (ushort)((1000 + 300) * 0.8), "CANFD 1538 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 1538461, 1000, 300, 300, (ushort)((1000 + 300) * 0.8), "CANFD 1538 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 2000 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 2000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD2000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 2000 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 2000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD2000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 2000000, 1600, 400, 400, (ushort)((1600 + 400) * 0.8), "CANFD 2000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 2000000, 1600, 400, 400, (ushort)((1600 + 400) * 0.8), "CANFD 2000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 4000 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 4000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD4000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 4000 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 4000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD4000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 4000000, 800, 200, 200, (ushort)((800 + 200) * 0.8), "CANFD 4000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 4000000, 800, 200, 200, (ushort)((800 + 200) * 0.8), "CANFD 4000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 5000 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 5000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD5000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 5000 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 5000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD5000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 5000000, 600, 200, 200, (ushort)((600 + 200) * 0.75), "CANFD 5000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 5000000, 600, 200, 200, (ushort)((600 + 200) * 0.75), "CANFD 5000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 6666 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 6666 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD6667KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 6666 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 6666 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD6667KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 6666666, 400, 200, 200, (ushort)((400 + 200) * 0.67), "CANFD 6667 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 6666666, 400, 200, 200, (ushort)((400 + 200) * 0.67), "CANFD 6667 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 8000 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 8000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD8000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 8000 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 8000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD8000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 8000000, 400, 100, 100, (ushort)((400 + 100) * 0.5), "CANFD 8000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 8000000, 400, 100, 100, (ushort)((400 + 100) * 0.5), "CANFD 8000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets the bit timing value for the predefined bit rate of 10000 kbit/s.
-      /// </summary>
-      /// <returns>
-      ///   Bit timing value for the predefined 10000 kbit/s.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2 CANFD10000KBit
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined bit rate of 10000 kbit/s.
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 10000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANFD10000KBit
+    {
+      get
       {
-        get
-        {
-          return new CanBitrate2(CanBitrateMode.None, 10000000, 300, 100, 100, (ushort)((300 + 100) * 0.5), "CANFD 10000 kbit/s");
-        }
+        return new CanBitrate2(CanBitrateMode.None, 10000000, 300, 100, 100, (ushort)((300 + 100) * 0.5), "CANFD 10000 kbit/s");
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets an array of all available CANFD raw bit rates specific 
-      ///   for IFI CANFD controllers.
-      /// </summary>
-      /// <returns>
-      ///   Array of all available CiA baud rates.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2[] CanFdIFIBitRates
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets an array of all available CANFD raw bit rates specific 
+    ///   for IFI CANFD controllers.
+    /// </summary>
+    /// <returns>
+    ///   Array of all available CiA baud rates.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2[] CanFdIFIBitRates
+    {
+      get
       {
-        get
-        {
-          CanBitrate2[] fdRates = new CanBitrate2[] { IFI1000KBit,
-                                                      IFI2000KBit,
-                                                      IFI4000KBit,
-                                                      IFI5000KBit,
-                                                      IFI6667KBit,
-                                                      IFI8000KBit,
-                                                      IFI10000KBit
-                                                    };
-          return fdRates;
-        }
+        CanBitrate2[] fdRates = new CanBitrate2[] { IFI1000KBit,
+                                                    IFI2000KBit,
+                                                    IFI4000KBit,
+                                                    IFI5000KBit,
+                                                    IFI6667KBit,
+                                                    IFI8000KBit,
+                                                    IFI10000KBit
+                                                  };
+        return fdRates;
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets an array of all available non raw CAN-FD bit rates.
-      /// </summary>
-      /// <returns>
-      ///   Array of all available non raw CAN-FD bit rates.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2[] CanFdBitRates
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets an array of all available non raw CAN-FD bit rates.
+    /// </summary>
+    /// <returns>
+    ///   Array of all available non raw CAN-FD bit rates.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2[] CanFdBitRates
+    {
+      get
       {
-        get
-        {
-          CanBitrate2[] fdRates = new CanBitrate2[] { CANFD1000KBit,
-                                                      CANFD2000KBit,
-                                                      CANFD4000KBit,
-                                                      CANFD5000KBit,
-                                                      CANFD6667KBit,
-                                                      CANFD8000KBit,
-                                                      CANFD10000KBit
-                                                    };
-          return fdRates;
-        }
+        CanBitrate2[] fdRates = new CanBitrate2[] { CANFD1000KBit,
+                                                    CANFD2000KBit,
+                                                    CANFD4000KBit,
+                                                    CANFD5000KBit,
+                                                    CANFD6667KBit,
+                                                    CANFD8000KBit,
+                                                    CANFD10000KBit
+                                                  };
+        return fdRates;
       }
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Gets an array of all available CiA bit rates.
-      /// </summary>
-      /// <returns>
-      ///   Array of all available CiA bit rates.
-      /// </returns>
-      //*****************************************************************************
-      public static CanBitrate2[] CiaBitRates
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets an array of all available CiA bit rates.
+    /// </summary>
+    /// <returns>
+    ///   Array of all available CiA bit rates.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2[] CiaBitRates
+    {
+      get
       {
-        get
-        {
-          CanBitrate2[] ciaRates = new CanBitrate2[] { Cia10KBit,  
-                                                       Cia20KBit,  
-                                                       Cia50KBit,
-                                                       Cia125KBit, 
-                                                       Cia250KBit,
-                                                       Cia500KBit, 
-                                                       Cia800KBit, 
-                                                       Cia1000KBit
-                                                     };
-          return ciaRates;
-        }
+        CanBitrate2[] bitrates = new CanBitrate2[] { Cia10KBit,
+                                                     Cia20KBit,
+                                                     Cia50KBit,
+                                                     Cia125KBit,
+                                                     Cia250KBit,
+                                                     Cia500KBit,
+                                                     Cia800KBit,
+                                                     Cia1000KBit
+                                                   };
+        return bitrates;
       }
+    }
+
+    //
+    // CANopen bitrates according to CiA specification (CiA 1301)
+    //
+    // CiA CANopen arbitration bitrates according to table C.1 (CiA 1301)
+    //
+    // -----------------+-----------+-------+-------+-------+-----------------+--------
+    // Bitrate [kBit/s] | BPS [1/s] |  TS1  |  TS2  |  SJW  |  SSP (aka TDO)  | SP [%]
+    // -----------------+-----------+-------+-------+-------+-----------------+--------
+    //   1000              1000000     800     200     200      0               80,0
+    //    800               800000     800     200     200      0               80,0
+    //    500               500000     800     200     200      0               80,0
+    //    250               250000     800     200     200      0               80,0
+    //    125               125000     800     200     200      0               80,0
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CANopen arbitration
+    ///   bit rate of 1000 kbit/s (see table C.1 of CiA 1301).
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 1000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANopenArb1000KBit
+    {
+      get
+      {
+        return new CanBitrate2(CanBitrateMode.None, 1000000, 800, 200, 200, 0, "CANopen 1000 kbit/s");
+      }
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CANopen arbitration
+    ///   bit rate of 800 kbit/s (see table C.1 of CiA 1301).
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 800 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANopenArb800KBit
+    {
+      get
+      {
+        return new CanBitrate2(CanBitrateMode.None, 800000, 800, 200, 200, 0, "CANopen 800 kbit/s");
+      }
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CANopen arbitration
+    ///   bit rate of 500 kbit/s (see table C.1 of CiA 1301).
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 500 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANopenArb500KBit
+    {
+      get
+      {
+        return new CanBitrate2(CanBitrateMode.None, 500000, 800, 200, 200, 0, "CANopen 500 kbit/s");
+      }
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CANopen arbitration
+    ///   bit rate of 250 kbit/s (see table C.1 of CiA 1301).
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 250 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANopenArb250KBit
+    {
+      get
+      {
+        return new CanBitrate2(CanBitrateMode.None, 250000, 800, 200, 200, 0, "CANopen 250 kbit/s");
+      }
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CANopen arbitration
+    ///   bit rate of 125 kbit/s (see table C.1 of CiA 1301).
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 125 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANopenArb125KBit
+    {
+      get
+      {
+        return new CanBitrate2(CanBitrateMode.None, 125000, 800, 200, 200, 0, "CANopen 125 kbit/s");
+      }
+    }
+
+    // CiA CANopen data bitrates according to table C.2  (CiA 1301)
+    // SSP = 0xFFFF, means VCI determines SSP according to simplified SSP positioning
+    //
+    // -----------------+-----------+-------+-------+-------+------------ --+--------
+    // Bitrate [kBit/s] | BPS [1/s] |  TS1  |  TS2  |  SJW  |  SSP (aka TDO)| SP [%]
+    // -----------------+-----------+-------+-------+-------+---------------+--------
+    //   1000              1000000     800     200     200     775 (77,5%)    80,0
+    //   2000              2000000     750     250     250     770 (77,0%)    75,0
+    //   4000              4000000     700     300     300     600 (60,0%)    70,0 
+    //   5000              5000000     750     250     250     500 (50,0%)    75,0
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CANopen data
+    ///   bit rate of 1000 kbit/s (see table C.2 of CiA 1301).
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 1000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANopen1000KBit
+    {
+      get
+      {
+        return new CanBitrate2(CanBitrateMode.None, 1000000, 800, 200, 200, (ushort)((800 + 200) * 0.75), "CANopen 10000 kbit/s");
+      }
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CANopen data
+    ///   bit rate of 2000 kbit/s (see table C.2 of CiA 1301).
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 2000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANopen2000KBit
+    {
+      get
+      {
+        return new CanBitrate2(CanBitrateMode.None, 2000000, 750, 250, 250, (ushort)((750 + 250) * 0.77), "CANopen 20000 kbit/s");
+      }
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CANopen data
+    ///   bit rate of 4000 kbit/s (see table C.2 of CiA 1301).
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 4000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANopen4000KBit
+    {
+      get
+      {
+        return new CanBitrate2(CanBitrateMode.None, 4000000, 700, 300, 300, (ushort)((700 + 300) * 0.6), "CANopen 4000 kbit/s");
+      }
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets the bit timing value for the predefined CANopen data
+    ///   bit rate of 5000 kbit/s (see table C.2 of CiA 1301).
+    /// </summary>
+    /// <returns>
+    ///   Bit timing value for the predefined 5000 kbit/s.
+    /// </returns>
+    //*****************************************************************************
+    public static CanBitrate2 CANopen5000KBit
+    {
+      get
+      {
+        return new CanBitrate2(CanBitrateMode.None, 5000000, 750, 250, 250, (ushort)((750 + 250) * 0.75), "CANopen 5000 kbit/s");
+      }
+    }
 
 
     //--------------------------------------------------------------------
     // member functions
     //--------------------------------------------------------------------
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Constructor for a new CanBitrate2.
-      /// </summary>
-      /// <param name="BittimingMode">
-      ///   Value for bit timing register 0.
-      /// </param>
-      /// <param name="Prescaler">
-      ///   Bits per second or prescaler (see <c>CanBitrateMode</c>).
-      /// </param>
-      /// <param name="TimeSegment1">
-      ///   Length of time segment 1 in quantas.
-      /// </param>
-      /// <param name="TimeSegment2">
-      ///   Length of time segment 2 in quantas.
-      /// </param>
-      /// <param name="Sjw">
-      ///   Re-synchronisation jump width in quantas.
-      /// </param>
-      /// <param name="TranmitterDelay">
-      ///   Transceiver delay compensation offset in quantas.
-      ///   (0 = disabled)
-      /// </param>
-      //*****************************************************************************
-      public CanBitrate2(CanBitrateMode BittimingMode, uint   Prescaler, ushort TimeSegment1,
-        ushort TimeSegment2, ushort Sjw, ushort TranmitterDelay)
+    //*****************************************************************************
+    /// <summary>
+    ///   Constructor for a new CanBitrate2.
+    /// </summary>
+    /// <param name="BittimingMode">
+    ///   Value for bit timing register 0.
+    /// </param>
+    /// <param name="Prescaler">
+    ///   Bits per second or prescaler (see <c>CanBitrateMode</c>).
+    /// </param>
+    /// <param name="TimeSegment1">
+    ///   Length of time segment 1 in quantas.
+    /// </param>
+    /// <param name="TimeSegment2">
+    ///   Length of time segment 2 in quantas.
+    /// </param>
+    /// <param name="Sjw">
+    ///   Re-synchronisation jump width in quantas.
+    /// </param>
+    /// <param name="TranmitterDelay">
+    ///   Transceiver delay compensation offset in quantas.
+    ///   (0 = disabled)
+    /// </param>
+    //*****************************************************************************
+    public CanBitrate2(CanBitrateMode BittimingMode, uint   Prescaler, ushort TimeSegment1,
+      ushort TimeSegment2, ushort Sjw, ushort TranmitterDelay)
+    {
+      m_dwMode = (UInt32)BittimingMode;
+      m_dwBPS = Prescaler;
+      m_wTS1 = TimeSegment1;
+      m_wTS2 = TimeSegment2;
+      m_wSJW = Sjw;
+      m_wTDO = TranmitterDelay;
+      m_sName = null;
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Constructor for a new CanBitrate2.
+    /// </summary>
+    /// <param name="BittimingMode">
+    ///   Value for bit timing register 0.
+    /// </param>
+    /// <param name="Prescaler">
+    ///   Bits per second or prescaler (see <c>CanBitrateMode</c>).
+    /// </param>
+    /// <param name="TimeSegment1">
+    ///   Length of time segment 1 in quantas.
+    /// </param>
+    /// <param name="TimeSegment2">
+    ///   Length of time segment 2 in quantas.
+    /// </param>
+    /// <param name="Sjw">
+    ///   Re-synchronisation jump width in quantas.
+    /// </param>
+    /// <param name="TranmitterDelay">
+    ///   Transceiver delay compensation offset in quantas.
+    ///   (0 = disabled)
+    /// </param>
+    /// <param name="name">
+    ///   Human readable name of the bit rate. 
+    /// </param>
+    //*****************************************************************************
+    public CanBitrate2(CanBitrateMode BittimingMode, uint   Prescaler, ushort TimeSegment1,
+      ushort TimeSegment2, ushort Sjw, ushort TranmitterDelay, string  name)
+    {
+      m_dwMode = (UInt32)BittimingMode;
+      m_dwBPS = Prescaler;
+      m_wTS1 = TimeSegment1;
+      m_wTS2 = TimeSegment2;
+      m_wSJW = Sjw;
+      m_wTDO = TranmitterDelay;
+      m_sName = name;
+    }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   This method returns a String that represents the current timing value.
+    /// </summary>
+    /// <returns>
+    ///   A String that represents the current bit timing value.
+    /// </returns>
+    //*****************************************************************************
+    public override string ToString()
+    {
+      if (null == m_sName)
       {
-        m_dwMode = (UInt32)BittimingMode;
-        m_dwBPS = Prescaler;
-        m_wTS1 = TimeSegment1;
-        m_wTS2 = TimeSegment2;
-        m_wSJW = Sjw;
-        m_wTDO = TranmitterDelay;
-        m_sName = null;
+        // TODO: think about representation
+        m_sName = "not specified";
       }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Constructor for a new CanBitrate2.
-      /// </summary>
-      /// <param name="BittimingMode">
-      ///   Value for bit timing register 0.
-      /// </param>
-      /// <param name="Prescaler">
-      ///   Bits per second or prescaler (see <c>CanBitrateMode</c>).
-      /// </param>
-      /// <param name="TimeSegment1">
-      ///   Length of time segment 1 in quantas.
-      /// </param>
-      /// <param name="TimeSegment2">
-      ///   Length of time segment 2 in quantas.
-      /// </param>
-      /// <param name="Sjw">
-      ///   Re-synchronisation jump width in quantas.
-      /// </param>
-      /// <param name="TranmitterDelay">
-      ///   Transceiver delay compensation offset in quantas.
-      ///   (0 = disabled)
-      /// </param>
-      /// <param name="name">
-      ///   Human readable name of the bit rate. 
-      /// </param>
-      //*****************************************************************************
-      public CanBitrate2(CanBitrateMode BittimingMode, uint   Prescaler, ushort TimeSegment1,
-        ushort TimeSegment2, ushort Sjw, ushort TranmitterDelay, string  name)
-      {
-        m_dwMode = (UInt32)BittimingMode;
-        m_dwBPS = Prescaler;
-        m_wTS1 = TimeSegment1;
-        m_wTS2 = TimeSegment2;
-        m_wSJW = Sjw;
-        m_wTDO = TranmitterDelay;
-        m_sName = name;
-      }
+      return( m_sName );
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   This method returns a String that represents the current timing value.
-      /// </summary>
-      /// <returns>
-      ///   A String that represents the current bit timing value.
-      /// </returns>
-      //*****************************************************************************
-      public override string ToString()
-      {
-        if (null == m_sName)
-        {
-          // TODO: think about representation
-          m_sName = "not specified";
-        }
+    //*****************************************************************************
+    /// <summary>
+    ///   Determines whether the specified Object is equal to the current Object.
+    /// </summary>
+    /// <pararm name ="obj">
+    ///   The Object to compare with the current Object.
+    /// </pararm>
+    /// <returns>
+    ///   true if the specified Object is equal to the current Object; 
+    ///   otherwise, false.
+    /// </returns>
+    //*****************************************************************************
+    public override bool Equals(Object? obj)
+    {
+      // Check for null values and compare run-time types.
+      if (!(obj is CanBitrate2))
+        return false;
 
-        return( m_sName );
-      }
+      return Equals((CanBitrate2)obj);
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Determines whether the specified Object is equal to the current Object.
-      /// </summary>
-      /// <pararm name ="obj">
-      ///   The Object to compare with the current Object.
-      /// </pararm>
-      /// <returns>
-      ///   true if the specified Object is equal to the current Object; 
-      ///   otherwise, false.
-      /// </returns>
-      //*****************************************************************************
-      public override bool Equals(Object? obj)
-      {
-        // Check for null values and compare run-time types.
-        if (!(obj is CanBitrate2))
-          return false;
+    //*****************************************************************************
+    /// <summary>
+    ///   Determines whether the specified Object is equal to the current Object.
+    /// </summary>
+    /// <pararm name ="other">
+    ///   The Object to compare with the current Object.
+    /// </pararm>
+    /// <returns>
+    ///   true if the specified Object is equal to the current Object; 
+    ///   otherwise, false.
+    /// </returns>
+    //*****************************************************************************
+    public bool Equals(CanBitrate2 other)
+    {
+      return ((Mode == other.Mode) &&
+              (Prescaler == other.Prescaler) &&
+              (TimeSegment1 == other.TimeSegment1) &&
+              (TimeSegment2 == other.TimeSegment2) &&
+              (Sjw == other.Sjw) &&
+              (TransmitterDelay == other.TransmitterDelay));
+    }
 
-        return Equals((CanBitrate2)obj);
-      }
+    //*****************************************************************************
+    /// <summary>
+    ///   Comparison operator ==
+    /// </summary>
+    /// <pararm name ="lhs">
+    ///   left hand side object to compare
+    /// </pararm>
+    /// <pararm name ="rhs">
+    ///   right hand side object to compare
+    /// </pararm>
+    /// <returns>
+    ///   true if the specified Object is equal to the current Object; 
+    ///   otherwise, false.
+    /// </returns>
+    //*****************************************************************************
+    public static bool operator ==(CanBitrate2 lhs, CanBitrate2 rhs)
+    {
+      return lhs.Equals(rhs);
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Determines whether the specified Object is equal to the current Object.
-      /// </summary>
-      /// <pararm name ="other">
-      ///   The Object to compare with the current Object.
-      /// </pararm>
-      /// <returns>
-      ///   true if the specified Object is equal to the current Object; 
-      ///   otherwise, false.
-      /// </returns>
-      //*****************************************************************************
-      public bool Equals(CanBitrate2 other)
-      {
-        return ((Mode == other.Mode) &&
-                (Prescaler == other.Prescaler) &&
-                (TimeSegment1 == other.TimeSegment1) &&
-                (TimeSegment2 == other.TimeSegment2) &&
-                (Sjw == other.Sjw) &&
-                (TransmitterDelay == other.TransmitterDelay));
-      }
+    //*****************************************************************************
+    /// <summary>
+    ///   Comparison operator !=
+    /// </summary>
+    /// <pararm name ="lhs">
+    ///   left hand side object to compare
+    /// </pararm>
+    /// <pararm name ="rhs">
+    ///   right hand side object to compare
+    /// </pararm>
+    /// <returns>
+    ///   true if the specified Object is not equal to the current Object; 
+    ///   otherwise, false.
+    /// </returns>
+    //*****************************************************************************
+    public static bool operator !=(CanBitrate2 lhs, CanBitrate2 rhs)
+    {
+      return !lhs.Equals(rhs);
+    }
 
-      //*****************************************************************************
-      /// <summary>
-      ///   Comparison operator ==
-      /// </summary>
-      /// <pararm name ="lhs">
-      ///   left hand side object to compare
-      /// </pararm>
-      /// <pararm name ="rhs">
-      ///   right hand side object to compare
-      /// </pararm>
-      /// <returns>
-      ///   true if the specified Object is equal to the current Object; 
-      ///   otherwise, false.
-      /// </returns>
-      //*****************************************************************************
-      public static bool operator ==(CanBitrate2 lhs, CanBitrate2 rhs)
-      {
-        return lhs.Equals(rhs);
-      }
-
-      //*****************************************************************************
-      /// <summary>
-      ///   Comparison operator !=
-      /// </summary>
-      /// <pararm name ="lhs">
-      ///   left hand side object to compare
-      /// </pararm>
-      /// <pararm name ="rhs">
-      ///   right hand side object to compare
-      /// </pararm>
-      /// <returns>
-      ///   true if the specified Object is not equal to the current Object; 
-      ///   otherwise, false.
-      /// </returns>
-      //*****************************************************************************
-      public static bool operator !=(CanBitrate2 lhs, CanBitrate2 rhs)
-      {
-        return !lhs.Equals(rhs);
-      }
-
-      //*****************************************************************************
-      /// <summary>
-      ///   Serves as a hash function for a particular type. GetHashCode is suitable 
-      ///   for use in hashing algorithms and data structures like a hash table.
-      /// </summary>
-      /// <returns>
-      ///   A hash code for the current Object. 
-      /// </returns>
-      //*****************************************************************************
-      public override int GetHashCode()
-      {
-        return (int)(m_dwMode + m_dwBPS + m_wTS1 + m_wTS2 + m_wSJW + m_wTDO);
-      }
+    //*****************************************************************************
+    /// <summary>
+    ///   Serves as a hash function for a particular type. GetHashCode is suitable 
+    ///   for use in hashing algorithms and data structures like a hash table.
+    /// </summary>
+    /// <returns>
+    ///   A hash code for the current Object. 
+    /// </returns>
+    //*****************************************************************************
+    public override int GetHashCode()
+    {
+      return (int)(m_dwMode + m_dwBPS + m_wTS1 + m_wTS2 + m_wSJW + m_wTDO);
+    }
   };
 
 
@@ -1550,7 +1728,7 @@ namespace Ixxat.Vci4.Bal.Can
     {
       get
       {
-        CanFdBitrate[] ciaRates = new CanFdBitrate[] { new CanFdBitrate(CanBitrate2.Cia10KBit),
+        CanFdBitrate[] bitrates = new CanFdBitrate[] { new CanFdBitrate(CanBitrate2.Cia10KBit),
                                                        new CanFdBitrate(CanBitrate2.Cia20KBit),  
                                                        new CanFdBitrate(CanBitrate2.Cia50KBit),
                                                        new CanFdBitrate(CanBitrate2.Cia125KBit), 
@@ -1559,7 +1737,7 @@ namespace Ixxat.Vci4.Bal.Can
                                                        new CanFdBitrate(CanBitrate2.Cia800KBit), 
                                                        new CanFdBitrate(CanBitrate2.Cia1000KBit)
                                                      };
-        return ciaRates;
+        return bitrates;
       }
     }
 
@@ -1575,7 +1753,7 @@ namespace Ixxat.Vci4.Bal.Can
     {
       get
       {
-        CanFdBitrate[] ciaRates = new CanFdBitrate[] { new CanFdBitrate(CanBitrate2.CANFD500KBit, CanBitrate2.CANFD1000KBit),
+        CanFdBitrate[] bitrates = new CanFdBitrate[] { new CanFdBitrate(CanBitrate2.CANFD500KBit, CanBitrate2.CANFD1000KBit),
                                                        new CanFdBitrate(CanBitrate2.CANFD500KBit, CanBitrate2.CANFD2000KBit),
                                                        new CanFdBitrate(CanBitrate2.CANFD500KBit, CanBitrate2.CANFD4000KBit),
                                                        new CanFdBitrate(CanBitrate2.CANFD500KBit, CanBitrate2.CANFD5000KBit),
@@ -1583,7 +1761,7 @@ namespace Ixxat.Vci4.Bal.Can
                                                        new CanFdBitrate(CanBitrate2.CANFD500KBit, CanBitrate2.CANFD8000KBit),
                                                        new CanFdBitrate(CanBitrate2.CANFD500KBit, CanBitrate2.CANFD10000KBit)
                                                      };
-        return ciaRates;
+        return bitrates;
       }
     }
 
@@ -1599,18 +1777,58 @@ namespace Ixxat.Vci4.Bal.Can
     {
       get
       {
-        CanFdBitrate[] ciaRates = new CanFdBitrate[] { new CanFdBitrate(CanBitrate2.CANFD250KBit, CanBitrate2.CANFD500KBit),
+        CanFdBitrate[] bitrates = new CanFdBitrate[] { new CanFdBitrate(CanBitrate2.CANFD250KBit, CanBitrate2.CANFD500KBit),
                                                        new CanFdBitrate(CanBitrate2.CANFD250KBit, CanBitrate2.CANFD833KBit),
                                                        new CanFdBitrate(CanBitrate2.CANFD250KBit, CanBitrate2.CANFD1000KBit),
                                                        new CanFdBitrate(CanBitrate2.CANFD250KBit, CanBitrate2.CANFD1538KBit),
                                                        new CanFdBitrate(CanBitrate2.CANFD250KBit, CanBitrate2.CANFD2000KBit),
                                                        new CanFdBitrate(CanBitrate2.CANFD250KBit, CanBitrate2.CANFD4000KBit)
                                                      };
-        return ciaRates;
+        return bitrates;
       }
     }
+
+    //*****************************************************************************
+    /// <summary>
+    ///   Gets an array of common CANopen bitrates according to CiA 1301 
+    ///   table C.1 and C.2
+    /// </summary>
+    /// <returns>
+    ///   Array of all available CiA baud rates.
+    /// </returns>
+    //*****************************************************************************
+    public static CanFdBitrate[] CANopenBitRates
+    {
+      get
+      {
+        CanFdBitrate[] bitrates = new CanFdBitrate[] { new CanFdBitrate(CanBitrate2.CANopenArb125KBit, CanBitrate2.CANopen1000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb125KBit, CanBitrate2.CANopen2000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb125KBit, CanBitrate2.CANopen4000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb125KBit, CanBitrate2.CANopen5000KBit),
+
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb250KBit, CanBitrate2.CANopen1000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb250KBit, CanBitrate2.CANopen2000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb250KBit, CanBitrate2.CANopen4000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb250KBit, CanBitrate2.CANopen5000KBit),
+
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb500KBit, CanBitrate2.CANopen1000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb500KBit, CanBitrate2.CANopen2000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb500KBit, CanBitrate2.CANopen4000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb500KBit, CanBitrate2.CANopen5000KBit),
+
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb800KBit, CanBitrate2.CANopen1000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb800KBit, CanBitrate2.CANopen2000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb800KBit, CanBitrate2.CANopen4000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb800KBit, CanBitrate2.CANopen5000KBit),
+
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb1000KBit, CanBitrate2.CANopen1000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb1000KBit, CanBitrate2.CANopen2000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb1000KBit, CanBitrate2.CANopen4000KBit),
+                                                       new CanFdBitrate(CanBitrate2.CANopenArb1000KBit, CanBitrate2.CANopen5000KBit)
+                                                     };
+        return bitrates;
+      }
+    }
+
   }
-
-
-
 }
