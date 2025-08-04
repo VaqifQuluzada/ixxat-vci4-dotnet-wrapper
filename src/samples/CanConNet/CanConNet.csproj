@@ -5,15 +5,10 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <BaseOutputPath>..\..\..\bin\</BaseOutputPath>
-    <SignAssembly>$(BuildSignAssembly)</SignAssembly>
-    <AssemblyOriginatorKeyFile>$(BuildAssemblyKeyFile)</AssemblyOriginatorKeyFile>
-    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\contract\Ixxat.Vci4.Contract.csproj" />
-    <ProjectReference Include="..\..\loader\Ixxat.Vci4.csproj" />
+    <PackageReference Include="Ixxat.Vci4" Version="4.1.12" />
   </ItemGroup>
 
 </Project>
