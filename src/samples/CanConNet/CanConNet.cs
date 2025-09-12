@@ -156,6 +156,34 @@ namespace CanConNet
                         client = tcpClient;
                         stream = client.GetStream();
                         isServerInitialized = true;
+
+                        // Start Unity -> Console receive loop
+                        Task.Run(() =>
+                        {
+                            try
+                            {
+                                byte[] buffer = new byte[1024];
+                                while (client != null && client.Connected && stream != null)
+                                {
+                                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                                    if (bytesRead > 0)
+                                    {
+                                        string unityMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                                        Console.WriteLine("Received from Unity: " + unityMessage);
+
+                                        // Example: If Unity sends "SENDCAN:100:11 22 33 44 55"
+                                        if (unityMessage.StartsWith("SENDCAN:"))
+                                        {
+                                            HandleUnityCanMessage(unityMessage);
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Error receiving from Unity: " + ex.Message);
+                            }
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -163,6 +191,47 @@ namespace CanConNet
                     }
                 }
             });
+        }
+
+        #endregion
+
+        #region Unity -> CAN message handler
+
+        static void HandleUnityCanMessage(string unityMessage)
+        {
+            try
+            {
+                unityMessage = unityMessage.Trim(); // <-- trim whitespace/newlines
+
+                // Example format: "SENDCAN:256:11 22 33 44 55"
+                string[] parts = unityMessage.Split(':');
+                if (parts.Length < 3) return;
+
+                uint id = Convert.ToUInt32(parts[1].Trim());
+                byte[] data = parts[2].Split(' ')
+                                      .Where(x => !string.IsNullOrWhiteSpace(x))
+                                      .Select(x => Convert.ToByte(x.Trim(), 16))
+                                      .ToArray();
+
+                if (mWriter != null)
+                {
+                    IMessageFactory factory = VciServer.Instance()!.MsgFactory;
+                    ICanMessage canMsg = (ICanMessage)factory.CreateMsg(typeof(ICanMessage));
+                    canMsg.Identifier = id;
+                    canMsg.FrameType = CanMsgFrameType.Data;
+                    canMsg.DataLength = (byte)data.Length;
+
+                    for (int i = 0; i < data.Length; i++)
+                        canMsg[i] = data[i];
+
+                    mWriter.SendMessage(canMsg);
+                    Console.WriteLine($"Forwarded Unity message to CAN bus: ID={id}, Data={parts[2]}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error handling Unity message: " + ex.Message);
+            }
         }
 
         #endregion
@@ -331,7 +400,7 @@ namespace CanConNet
                             Console.Write(" {0,2:X}", canMessage[index]);
                             canData += canMessage[index].ToString("X2") + " ";
                         }
-                            
+
                         Console.Write("\n");
                     }
                     else
