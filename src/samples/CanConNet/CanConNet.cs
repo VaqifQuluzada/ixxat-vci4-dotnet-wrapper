@@ -101,7 +101,7 @@ namespace CanConNet
                         cki = Console.ReadKey(true);
                         if (cki.Key == ConsoleKey.T)
                         {
-                            TransmitData();
+                            TransmitData(0x100, Enumerable.Range(0, 8).Select(i => (byte)i).ToArray());
                         }
                         else if (cki.Key == ConsoleKey.C)
                         {
@@ -171,11 +171,8 @@ namespace CanConNet
                                         string unityMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                                         Console.WriteLine("Received from Unity: " + unityMessage);
 
-                                        // Example: If Unity sends "SENDCAN:100:11 22 33 44 55"
-                                        if (unityMessage.StartsWith("SENDCAN:"))
-                                        {
-                                            HandleUnityCanMessage(unityMessage);
-                                        }
+                                        HandleUnityCanMessage(unityMessage);
+
                                     }
                                 }
                             }
@@ -201,37 +198,71 @@ namespace CanConNet
         {
             try
             {
-                unityMessage = unityMessage.Trim(); // <-- trim whitespace/newlines
+                unityMessage = unityMessage.Trim();
 
-                // Example format: "SENDCAN:256:11 22 33 44 55"
-                string[] parts = unityMessage.Split(':');
-                if (parts.Length < 3) return;
+                // Only handle full CanMessage format: "Time: ... ID: ... DLC: ..., Data: ..."
+                int timeIdx = unityMessage.IndexOf("Time:");
+                int idIdx = unityMessage.IndexOf("ID:");
+                int dlcIdx = unityMessage.IndexOf("DLC:");
+                int dataIdx = unityMessage.IndexOf("Data:");
 
-                uint id = Convert.ToUInt32(parts[1].Trim());
-                byte[] data = parts[2].Split(' ')
-                                      .Where(x => !string.IsNullOrWhiteSpace(x))
-                                      .Select(x => Convert.ToByte(x.Trim(), 16))
-                                      .ToArray();
+                if (timeIdx == -1 || idIdx == -1 || dlcIdx == -1 || dataIdx == -1)
+                    return;
 
-                if (mWriter != null)
-                {
-                    IMessageFactory factory = VciServer.Instance()!.MsgFactory;
-                    ICanMessage canMsg = (ICanMessage)factory.CreateMsg(typeof(ICanMessage));
-                    canMsg.Identifier = id;
-                    canMsg.FrameType = CanMsgFrameType.Data;
-                    canMsg.DataLength = (byte)data.Length;
+                // Extract each value safely
+                string timeStr = unityMessage.Substring(timeIdx + 5, idIdx - (timeIdx + 5)).Trim();
+                string idStr = unityMessage.Substring(idIdx + 3, dlcIdx - (idIdx + 3)).Trim();
+                string dlcStr = unityMessage.Substring(dlcIdx + 4, dataIdx - (dlcIdx + 4)).Trim().TrimEnd(','); // remove comma
+                string dataStr = unityMessage.Substring(dataIdx + 5).Trim(); // everything after "Data:"
 
-                    for (int i = 0; i < data.Length; i++)
-                        canMsg[i] = data[i];
+                // Parse values
+                long timeStamp = 0;
+                long.TryParse(timeStr, out timeStamp);
 
-                    mWriter.SendMessage(canMsg);
-                    Console.WriteLine($"Forwarded Unity message to CAN bus: ID={id}, Data={parts[2]}");
-                }
+                uint id = 0;
+                uint.TryParse(idStr, out id);
+
+                int dlc = 0;
+                int.TryParse(dlcStr, out dlc);
+
+                byte[] data = dataStr.Split(' ')
+                                     .Where(x => !string.IsNullOrWhiteSpace(x))
+                                     .Select(x => Convert.ToByte(x, 16))
+                                     .ToArray();
+
+                // Send to CAN
+                TransmitData(id, data);
+
+                Console.WriteLine($"[Unity->CAN] Time={timeStamp} ID=0x{id:X} DLC={dlc} Data={string.Join(" ", data.Select(b => b.ToString("X2")))}");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error handling Unity message: " + ex.Message);
             }
+        }
+
+
+        #endregion
+
+        #region Message transmission
+
+        static void TransmitData(uint id, byte[] payload)
+        {
+            if (null == mWriter) return;
+
+            IMessageFactory factory = VciServer.Instance()!.MsgFactory;
+            ICanMessage canMsg = (ICanMessage)factory.CreateMsg(typeof(ICanMessage));
+
+            canMsg.TimeStamp = 0;
+            canMsg.Identifier = id;
+            canMsg.FrameType = CanMsgFrameType.Data;
+            canMsg.DataLength = (byte)payload.Length;
+            canMsg.SelfReceptionRequest = true;
+
+            for (int i = 0; i < payload.Length; i++)
+                canMsg[i] = payload[i];
+
+            mWriter.SendMessage(canMsg);
         }
 
         #endregion
@@ -355,29 +386,6 @@ namespace CanConNet
 
         #endregion
 
-        #region Message transmission
-
-        static void TransmitData()
-        {
-            if (null == mWriter) return;
-
-            IMessageFactory factory = VciServer.Instance()!.MsgFactory;
-            ICanMessage canMsg = (ICanMessage)factory.CreateMsg(typeof(ICanMessage));
-
-            canMsg.TimeStamp = 0;
-            canMsg.Identifier = 0x100;
-            canMsg.FrameType = CanMsgFrameType.Data;
-            canMsg.DataLength = 8;
-            canMsg.SelfReceptionRequest = true;
-
-            for (Byte i = 0; i < canMsg.DataLength; i++)
-                canMsg[i] = i;
-
-            mWriter.SendMessage(canMsg);
-        }
-
-        #endregion
-
         #region Message reception
 
         static void PrintMessage(ICanMessage canMessage)
@@ -393,7 +401,6 @@ namespace CanConNet
                                       canMessage.TimeStamp,
                                       canMessage.Identifier,
                                       canMessage.DataLength);
-
 
                         for (int index = 0; index < canMessage.DataLength; index++)
                         {
