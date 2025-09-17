@@ -12,7 +12,9 @@
 using Ixxat.Vci4;
 using Ixxat.Vci4.Bal;
 using Ixxat.Vci4.Bal.Can;
+using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -101,7 +103,38 @@ namespace CanConNet
                         cki = Console.ReadKey(true);
                         if (cki.Key == ConsoleKey.T)
                         {
-                            TransmitData(0x100, Enumerable.Range(0, 8).Select(i => (byte)i).ToArray());
+                            uint transmittedDataId = 0x100;
+
+                            byte[] canDataBytePack = Enumerable.Range(0, 8).Select(i => (byte)i).ToArray();
+
+                            TransmitData(transmittedDataId, canDataBytePack);
+
+                            // Send to TCP client if connected
+                            if (isServerInitialized && client != null && client.Connected && stream != null)
+                            {
+                                try
+                                {
+                                    CanJsonMessage jsonMessage = new CanJsonMessage
+                                    {
+                                        Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                                        ID = transmittedDataId,
+                                        DLC = canDataBytePack.Length,
+                                        Data = canDataBytePack
+                                    };
+
+                                    byte[] data = Encoding.UTF8.GetBytes(jsonMessage.ToJson() +"\n");
+
+                                    string canDataHexString  = BitConverter.ToString(canDataBytePack).Replace("-",":");
+
+                                    stream.Write(data, 0, data.Length);
+
+                                    Console.WriteLine($"Data send to Unity: Time: {jsonMessage.Time} - ID:{jsonMessage.ID} - DLC:{jsonMessage.DLC} - Data:{canDataHexString}");
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("Error sending to TCP client: " + e.Message);
+                                }
+                            }
                         }
                         else if (cki.Key == ConsoleKey.C)
                         {
@@ -168,10 +201,13 @@ namespace CanConNet
                                     int bytesRead = stream.Read(buffer, 0, buffer.Length);
                                     if (bytesRead > 0)
                                     {
-                                        string unityMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                                        Console.WriteLine("Received from Unity: " + unityMessage);
+                                        string unityJsonMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-                                        HandleUnityCanMessage(unityMessage);
+                                        Console.WriteLine($"Unity json message received: {unityJsonMessage}");
+
+                                        CanJsonMessage canJsonMessage = CanJsonMessage.FromJson(unityJsonMessage);
+
+                                        HandleUnityCanMessage(canJsonMessage);
 
                                     }
                                 }
@@ -179,6 +215,7 @@ namespace CanConNet
                             catch (Exception ex)
                             {
                                 Console.WriteLine("Error receiving from Unity: " + ex.Message);
+                                Console.WriteLine("Error receiving from Unity Stack Trace: " + ex.StackTrace);
                             }
                         });
                     }
@@ -194,50 +231,17 @@ namespace CanConNet
 
         #region Unity -> CAN message handler
 
-        static void HandleUnityCanMessage(string unityMessage)
+        static void HandleUnityCanMessage(CanJsonMessage unityJsonMessage)
         {
             try
             {
-                unityMessage = unityMessage.Trim();
-
-                // Only handle full CanMessage format: "Time: ... ID: ... DLC: ..., Data: ..."
-                int timeIdx = unityMessage.IndexOf("Time:");
-                int idIdx = unityMessage.IndexOf("ID:");
-                int dlcIdx = unityMessage.IndexOf("DLC:");
-                int dataIdx = unityMessage.IndexOf("Data:");
-
-                if (timeIdx == -1 || idIdx == -1 || dlcIdx == -1 || dataIdx == -1)
-                    return;
-
-                // Extract each value safely
-                string timeStr = unityMessage.Substring(timeIdx + 5, idIdx - (timeIdx + 5)).Trim();
-                string idStr = unityMessage.Substring(idIdx + 3, dlcIdx - (idIdx + 3)).Trim();
-                string dlcStr = unityMessage.Substring(dlcIdx + 4, dataIdx - (dlcIdx + 4)).Trim().TrimEnd(','); // remove comma
-                string dataStr = unityMessage.Substring(dataIdx + 5).Trim(); // everything after "Data:"
-
-                // Parse values
-                long timeStamp = 0;
-                long.TryParse(timeStr, out timeStamp);
-
-                uint id = 0;
-                uint.TryParse(idStr, out id);
-
-                int dlc = 0;
-                int.TryParse(dlcStr, out dlc);
-
-                byte[] data = dataStr.Split(' ')
-                                     .Where(x => !string.IsNullOrWhiteSpace(x))
-                                     .Select(x => Convert.ToByte(x, 16))
-                                     .ToArray();
-
-                // Send to CAN
-                TransmitData(id, data);
-
-                Console.WriteLine($"[Unity->CAN] Time={timeStamp} ID=0x{id:X} DLC={dlc} Data={string.Join(" ", data.Select(b => b.ToString("X2")))}");
+                Console.WriteLine($"Received from Unity: ID={unityJsonMessage.ID:X}, DLC={unityJsonMessage.DLC}, Data=[{string.Join(", ", unityJsonMessage.Data ?? new byte[0])}]");
+                TransmitData((uint)unityJsonMessage.ID, unityJsonMessage.Data ?? new byte[0]);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error handling Unity message: " + ex.Message);
+                Console.WriteLine("Error handling Unity Stack Trace: " + ex.StackTrace);
             }
         }
 
@@ -390,7 +394,12 @@ namespace CanConNet
 
         static void PrintMessage(ICanMessage canMessage)
         {
-            string canData = "";
+            byte[] canData = new byte[canMessage.DataLength];
+
+            for (int index = 0; index < canMessage.DataLength; index++)
+            {
+                canData[index] = canMessage[index];
+            }
 
             switch (canMessage.FrameType)
             {
@@ -405,7 +414,6 @@ namespace CanConNet
                         for (int index = 0; index < canMessage.DataLength; index++)
                         {
                             Console.Write(" {0,2:X}", canMessage[index]);
-                            canData += canMessage[index].ToString("X2") + " ";
                         }
 
                         Console.Write("\n");
@@ -416,20 +424,10 @@ namespace CanConNet
                                       canMessage.TimeStamp,
                                       canMessage.Identifier,
                                       canMessage.DataLength);
-                    }
 
-                    // Send to TCP client if connected
-                    if (isServerInitialized && client != null && client.Connected && stream != null)
-                    {
-                        try
+                        for (int index = 0; index < canMessage.DataLength; index++)
                         {
-                            string message = $"Time:{canMessage.TimeStamp,10} ID:{canMessage.Identifier,3:X} DLC:{canMessage.DataLength,1}, Data: {canData}";
-                            byte[] data = Encoding.UTF8.GetBytes(message + "\n");
-                            stream.Write(data, 0, data.Length);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("Error sending to TCP client: " + e.Message);
+                            Console.Write(" {0,2:X}", canMessage[index]);
                         }
                     }
                     break;
