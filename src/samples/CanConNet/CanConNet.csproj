@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Ixxat.Vci4" Version="4.1.12" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
 </Project>

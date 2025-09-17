@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json;
 
 [Serializable]
 public class CanJsonMessage
@@ -11,7 +11,7 @@ public class CanJsonMessage
     // Serialize to JSON
     public string ToJson()
     {
-        string jsonString = JsonSerializer.Serialize(this);
+        string jsonString = JsonConvert.SerializeObject(this);
 
         return jsonString;
     }
@@ -19,7 +19,7 @@ public class CanJsonMessage
     // Deserialize from JSON
     public static CanJsonMessage FromJson(string json)
     {
-        CanJsonMessage canJsonMessage = JsonSerializer.Deserialize<CanJsonMessage>(json);
+        CanJsonMessage canJsonMessage = JsonConvert.DeserializeObject<CanJsonMessage>(json);
 
         return canJsonMessage;
     }

@@ -12,12 +12,11 @@
 using Ixxat.Vci4;
 using Ixxat.Vci4.Bal;
 using Ixxat.Vci4.Bal.Can;
-using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace CanConNet
 {
@@ -104,9 +103,7 @@ namespace CanConNet
                         if (cki.Key == ConsoleKey.T)
                         {
                             uint transmittedDataId = 0x100;
-
                             byte[] canDataBytePack = Enumerable.Range(0, 8).Select(i => (byte)i).ToArray();
-
                             TransmitData(transmittedDataId, canDataBytePack);
 
                             // Send to TCP client if connected
@@ -122,13 +119,11 @@ namespace CanConNet
                                         Data = canDataBytePack
                                     };
 
-                                    byte[] data = Encoding.UTF8.GetBytes(jsonMessage.ToJson() +"\n");
-
-                                    string canDataHexString  = BitConverter.ToString(canDataBytePack).Replace("-",":");
-
+                                    byte[] data = Encoding.UTF8.GetBytes(jsonMessage.ToJson() + "\n");
                                     stream.Write(data, 0, data.Length);
 
-                                    Console.WriteLine($"Data send to Unity: Time: {jsonMessage.Time} - ID:{jsonMessage.ID} - DLC:{jsonMessage.DLC} - Data:{canDataHexString}");
+                                    string canDataHexString = BitConverter.ToString(canDataBytePack).Replace("-", ":");
+                                    Console.WriteLine($"Data sent to Unity: Time: {jsonMessage.Time} - ID:{jsonMessage.ID} - DLC:{jsonMessage.DLC} - Data:{canDataHexString}");
                                 }
                                 catch (Exception e)
                                 {
@@ -183,7 +178,7 @@ namespace CanConNet
                 {
                     try
                     {
-                        var tcpClient = server.AcceptTcpClient(); // blocking but safe here
+                        var tcpClient = server.AcceptTcpClient();
                         Console.WriteLine("Client connected!");
 
                         client = tcpClient;
@@ -191,31 +186,51 @@ namespace CanConNet
                         isServerInitialized = true;
 
                         // Start Unity -> Console receive loop
-                        Task.Run(() =>
+                        Task.Run(async () =>
                         {
+                            StringBuilder sb = new StringBuilder();
                             try
                             {
-                                byte[] buffer = new byte[1024];
                                 while (client != null && client.Connected && stream != null)
                                 {
-                                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                                    byte[] buffer = new byte[1024];
+                                    int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+
                                     if (bytesRead > 0)
                                     {
-                                        string unityJsonMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                                        string received = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                                        sb.Append(received);
 
-                                        Console.WriteLine($"Unity json message received: {unityJsonMessage}");
+                                        string content = sb.ToString();
+                                        string[] messages = content.Split('\n');
 
-                                        CanJsonMessage canJsonMessage = CanJsonMessage.FromJson(unityJsonMessage);
+                                        // parse all complete messages
+                                        for (int i = 0; i < messages.Length - 1; i++)
+                                        {
+                                            string jsonMsg = messages[i].Trim();
+                                            if (!string.IsNullOrEmpty(jsonMsg))
+                                            {
+                                                try
+                                                {
+                                                    CanJsonMessage canJsonMessage = CanJsonMessage.FromJson(jsonMsg);
+                                                    HandleUnityCanMessage(canJsonMessage);
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    Console.WriteLine("JSON parse error: " + ex.Message);
+                                                }
+                                            }
+                                        }
 
-                                        HandleUnityCanMessage(canJsonMessage);
-
+                                        // keep the last (possibly incomplete) part in buffer
+                                        sb.Clear();
+                                        sb.Append(messages[messages.Length - 1]);
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
                                 Console.WriteLine("Error receiving from Unity: " + ex.Message);
-                                Console.WriteLine("Error receiving from Unity Stack Trace: " + ex.StackTrace);
                             }
                         });
                     }
@@ -236,15 +251,13 @@ namespace CanConNet
             try
             {
                 Console.WriteLine($"Received from Unity: ID={unityJsonMessage.ID:X}, DLC={unityJsonMessage.DLC}, Data=[{string.Join(", ", unityJsonMessage.Data ?? new byte[0])}]");
-                TransmitData((uint)unityJsonMessage.ID, unityJsonMessage.Data ?? new byte[0]);
+                TransmitData(unityJsonMessage.ID, unityJsonMessage.Data ?? new byte[0]);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error handling Unity message: " + ex.Message);
-                Console.WriteLine("Error handling Unity Stack Trace: " + ex.StackTrace);
             }
         }
-
 
         #endregion
 
