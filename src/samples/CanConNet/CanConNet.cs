@@ -279,6 +279,7 @@ namespace CanConNet
             canMsg.Identifier = id;
             canMsg.FrameType = CanMsgFrameType.Data;
             canMsg.DataLength = (byte)payload.Length;
+            canMsg.ExtendedFrameFormat = true;
             canMsg.SelfReceptionRequest = true;
 
             for (int i = 0; i < payload.Length; i++)
