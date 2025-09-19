@@ -105,31 +105,7 @@ namespace CanConNet
                             uint transmittedDataId = 0x100;
                             byte[] canDataBytePack = Enumerable.Range(0, 8).Select(i => (byte)i).ToArray();
                             TransmitData(transmittedDataId, canDataBytePack);
-
-                            // Send to TCP client if connected
-                            if (isServerInitialized && client != null && client.Connected && stream != null)
-                            {
-                                try
-                                {
-                                    CanJsonMessage jsonMessage = new CanJsonMessage
-                                    {
-                                        Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                                        ID = transmittedDataId,
-                                        DLC = canDataBytePack.Length,
-                                        Data = canDataBytePack
-                                    };
-
-                                    byte[] data = Encoding.UTF8.GetBytes(jsonMessage.ToJson() + "\n");
-                                    stream.Write(data, 0, data.Length);
-
-                                    string canDataHexString = BitConverter.ToString(canDataBytePack).Replace("-", ":");
-                                    Console.WriteLine($"Data sent to Unity: Time: {jsonMessage.Time} - ID:{jsonMessage.ID} - DLC:{jsonMessage.DLC} - Data:{canDataHexString}");
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine("Error sending to TCP client: " + e.Message);
-                                }
-                            }
+                            SendDataToUnity(transmittedDataId, canDataBytePack);
                         }
                         else if (cki.Key == ConsoleKey.C)
                         {
@@ -157,6 +133,34 @@ namespace CanConNet
 
             Console.WriteLine(" Done");
             Console.ReadLine();
+        }
+
+        private static void SendDataToUnity(uint transmittedDataId, byte[] canDataBytePack)
+        {
+            // Send to TCP client if connected
+            if (isServerInitialized && client != null && client.Connected && stream != null)
+            {
+                try
+                {
+                    CanJsonMessage jsonMessage = new CanJsonMessage
+                    {
+                        Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                        ID = transmittedDataId,
+                        DLC = canDataBytePack.Length,
+                        Data = canDataBytePack
+                    };
+
+                    byte[] data = Encoding.UTF8.GetBytes(jsonMessage.ToJson() + "\n");
+                    stream.Write(data, 0, data.Length);
+
+                    string canDataHexString = BitConverter.ToString(canDataBytePack).Replace("-", ":");
+                    Console.WriteLine($"Data sent to Unity: Time: {jsonMessage.Time} - ID:{jsonMessage.ID} - DLC:{jsonMessage.DLC} - Data:{canDataHexString}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error sending to TCP client: " + e.Message);
+                }
+            }
         }
 
         #endregion
@@ -252,6 +256,7 @@ namespace CanConNet
             {
                 Console.WriteLine($"Received from Unity: ID={unityJsonMessage.ID:X}, DLC={unityJsonMessage.DLC}, Data=[{string.Join(", ", unityJsonMessage.Data ?? new byte[0])}]");
                 TransmitData(unityJsonMessage.ID, unityJsonMessage.Data ?? new byte[0]);
+                SendDataToUnity(unityJsonMessage.ID, unityJsonMessage.Data ?? new byte[0]);
             }
             catch (Exception ex)
             {
